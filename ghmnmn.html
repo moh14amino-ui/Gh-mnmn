@@ -1,0 +1,864 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>GH&MNMN</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Tajawal:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/peerjs@1.5.2/dist/peerjs.min.js"></script>
+<style>
+:root{
+  --bg:#050608;
+  --s1:#0a0c12;
+  --s2:#10131d;
+  --s3:#161b28;
+  --border:#1c2235;
+  --border2:#242d42;
+  --gold:#c8a84b;
+  --gold2:#e8c96a;
+  --gold3:#f5dfa0;
+  --red:#d63348;
+  --red2:#ff3f55;
+  --green:#1db954;
+  --text:#f0ece0;
+  --muted:#4e596e;
+  --muted2:#7a8799;
+}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{height:100%;overflow:hidden}
+body{
+  background:var(--bg);color:var(--text);
+  font-family:'Tajawal',sans-serif;
+  height:100dvh;display:flex;flex-direction:column;overflow:hidden;
+}
+
+/* noise */
+body::after{
+  content:'';position:fixed;inset:0;z-index:9999;pointer-events:none;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='f'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23f)' opacity='0.025'/%3E%3C/svg%3E");
+}
+
+.screen{display:none;flex-direction:column;height:100dvh;overflow:hidden}
+.screen.active{display:flex}
+
+/* ══ LANDING ══ */
+#pg-land{
+  align-items:center;justify-content:center;
+  padding:1.5rem;
+  background:
+    radial-gradient(ellipse 120% 55% at 50% -5%, rgba(200,95,50,0.1) 0%, transparent 65%),
+    radial-gradient(ellipse 70% 40% at 15% 90%, rgba(200,168,75,0.07) 0%, transparent 55%),
+    var(--bg);
+}
+
+.brand{text-align:center;margin-bottom:2.2rem}
+
+.brand-name{
+  font-family:'Bebas Neue',cursive;
+  font-size:clamp(3.2rem,16vw,4.8rem);
+  letter-spacing:0.18em;
+  line-height:1;
+  background:linear-gradient(160deg,var(--gold3) 0%,var(--gold2) 30%,var(--gold) 65%,#8a6820 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  filter:drop-shadow(0 0 35px rgba(200,168,75,0.3));
+  animation:brandIn 0.9s cubic-bezier(0.16,1,0.3,1) both;
+}
+@keyframes brandIn{from{opacity:0;transform:translateY(20px) scale(0.94)}to{opacity:1;transform:none}}
+
+.brand-line{
+  display:flex;align-items:center;justify-content:center;gap:10px;
+  margin-top:0.6rem;
+  animation:fadeUp 0.9s 0.2s both;
+}
+.brand-line::before,.brand-line::after{
+  content:'';width:28px;height:1px;
+  background:linear-gradient(90deg,transparent,var(--gold));
+}
+.brand-line::after{background:linear-gradient(90deg,var(--gold),transparent)}
+.brand-tag{
+  font-size:0.62rem;letter-spacing:0.4em;
+  color:var(--gold);font-weight:700;text-transform:uppercase;
+}
+@keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+
+/* film strip */
+.strip{
+  display:flex;gap:4px;justify-content:center;
+  margin:1.4rem 0 0;opacity:0.2;
+  animation:fadeUp 0.9s 0.35s both;
+}
+.hole{
+  width:12px;height:7px;
+  border:1px solid var(--gold);border-radius:2px;
+}
+
+.lcard{
+  background:var(--s2);
+  border:1px solid var(--border2);
+  border-radius:22px;
+  padding:1.8rem 1.4rem;
+  width:100%;max-width:380px;
+  box-shadow:0 50px 100px rgba(0,0,0,0.7),inset 0 1px 0 rgba(255,255,255,0.03);
+  animation:cardIn 0.7s 0.15s cubic-bezier(0.16,1,0.3,1) both;
+}
+@keyframes cardIn{from{opacity:0;transform:translateY(28px)}to{opacity:1;transform:none}}
+
+.sep{
+  display:flex;align-items:center;gap:8px;
+  margin:1rem 0;color:var(--muted);font-size:0.72rem;
+}
+.sep::before,.sep::after{content:'';flex:1;height:1px;background:var(--border)}
+
+.finp{
+  width:100%;padding:0.85rem 1rem;
+  background:var(--s1);
+  border:1.5px solid var(--border2);border-radius:12px;
+  color:var(--text);font-family:'Tajawal',sans-serif;font-size:1rem;
+  outline:none;transition:border-color 0.2s,box-shadow 0.2s;
+  margin-bottom:0.75rem;
+}
+.finp:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(200,168,75,0.1)}
+.finp::placeholder{color:var(--muted)}
+.finp-code{
+  text-align:center;letter-spacing:0.45em;
+  font-size:1.25rem;font-weight:700;text-transform:uppercase;
+}
+
+.fbtn{
+  width:100%;padding:0.95rem;border:none;border-radius:14px;
+  font-family:'Tajawal',sans-serif;font-size:1rem;font-weight:700;
+  cursor:pointer;transition:all 0.15s;
+  position:relative;overflow:hidden;letter-spacing:0.03em;
+}
+.fbtn::before{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(170deg,rgba(255,255,255,0.07) 0%,transparent 55%);
+}
+.fbtn:active{transform:scale(0.965)}
+.fbtn-red{
+  background:linear-gradient(140deg,var(--red2) 0%,var(--red) 100%);
+  color:#fff;box-shadow:0 6px 28px rgba(214,51,72,0.45);
+}
+.fbtn-ghost{
+  background:transparent;border:1.5px solid var(--border2);
+  color:var(--text);margin-top:0.5rem;
+}
+.fbtn-ghost:active{border-color:var(--gold);color:var(--gold)}
+
+/* ══ ROOM HEADER ══ */
+.rh{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0.8rem 1rem;
+  background:var(--s2);border-bottom:1px solid var(--border);
+  flex-shrink:0;z-index:20;
+}
+.rh-logo{
+  font-family:'Bebas Neue',cursive;
+  font-size:1.25rem;letter-spacing:0.18em;
+  background:linear-gradient(135deg,var(--gold3),var(--gold));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+}
+.badge{
+  font-size:0.58rem;font-weight:700;letter-spacing:0.18em;
+  padding:3px 10px;border-radius:20px;text-transform:uppercase;
+}
+.badge-h{background:var(--red);color:#fff;box-shadow:0 0 14px rgba(214,51,72,0.5)}
+.badge-v{
+  color:var(--gold);border:1px solid rgba(200,168,75,0.35);
+  background:rgba(200,168,75,0.08);
+}
+.vcnt{display:flex;align-items:center;gap:4px;font-size:0.75rem;color:var(--muted2)}
+.ldot{width:5px;height:5px;border-radius:50%;animation:blink 1.8s infinite}
+.ldot-r{background:var(--red)}
+.ldot-g{background:var(--gold)}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0.25}}
+
+/* ══ VIDEO ══ */
+.vbox{
+  position:relative;width:100%;
+  aspect-ratio:16/9;background:#000;flex-shrink:0;
+}
+.vbox video{width:100%;height:100%;object-fit:contain;display:block}
+.vbox video::-webkit-media-controls{display:none !important}
+.vbox video::--webkit-media-controls-enclosure{display:none !important}
+
+.vover{
+  position:absolute;inset:0;
+  display:flex;flex-direction:column;
+  align-items:center;justify-content:center;gap:0.7rem;
+  background:radial-gradient(ellipse at center,#0d1120,#050608);
+  transition:opacity 0.4s;
+}
+.vover-icon{
+  width:52px;height:52px;border-radius:50%;
+  border:1.5px solid var(--border2);
+  display:flex;align-items:center;justify-content:center;
+  font-size:1.2rem;color:var(--muted);opacity:0.45;
+}
+.vover p{color:var(--muted);font-size:0.8rem;text-align:center;max-width:160px;line-height:1.5}
+
+.vwait{
+  position:absolute;inset:0;z-index:5;
+  display:flex;flex-direction:column;
+  align-items:center;justify-content:center;gap:0.7rem;
+  background:rgba(5,6,8,0.9);backdrop-filter:blur(3px);
+  transition:opacity 0.45s;
+}
+.spin{
+  width:36px;height:36px;
+  border:2px solid var(--border2);border-top-color:var(--red);
+  border-radius:50%;animation:spin 0.85s linear infinite;
+}
+@keyframes spin{to{transform:rotate(360deg)}}
+.vwait p{color:var(--muted);font-size:0.8rem;text-align:center}
+
+/* ══ STATUS BAR ══ */
+.sb{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0.4rem 1rem;
+  background:var(--s1);border-bottom:1px solid var(--border);
+  font-size:0.7rem;color:var(--muted);flex-shrink:0;
+}
+.sdot{
+  display:inline-block;width:5px;height:5px;
+  border-radius:50%;background:var(--muted);margin-left:4px;
+}
+.sdot-ok{background:var(--green);box-shadow:0 0 6px rgba(29,185,84,0.6)}
+.sdot-warn{background:var(--gold);animation:blink 1s infinite}
+.stag{
+  font-size:0.62rem;padding:2px 7px;border-radius:4px;font-weight:700;
+  letter-spacing:0.1em;
+  background:rgba(200,168,75,0.08);border:1px solid rgba(200,168,75,0.18);
+  color:var(--gold);
+}
+
+/* ══ HOST CONTROLS ══ */
+.ctrl-wrap{
+  flex:1;overflow-y:auto;
+  background:var(--s2);
+  display:flex;flex-direction:column;gap:0.8rem;
+  padding:0.9rem;
+}
+.ctrl-wrap::-webkit-scrollbar{width:0}
+
+/* Drive input */
+.drow{display:flex;gap:0.5rem}
+.drow input{
+  flex:1;padding:0.78rem 0.9rem;
+  background:var(--s1);
+  border:1.5px solid var(--border2);border-radius:12px;
+  color:var(--text);font-family:'Tajawal',sans-serif;font-size:0.85rem;
+  outline:none;transition:border-color 0.2s;direction:ltr;
+}
+.drow input:focus{border-color:var(--gold)}
+.drow input::placeholder{color:var(--muted)}
+.btn-load{
+  padding:0.78rem 1rem;
+  background:linear-gradient(140deg,var(--gold2),var(--gold));
+  border:none;border-radius:12px;
+  color:#07090f;font-family:'Tajawal',sans-serif;
+  font-size:0.88rem;font-weight:900;
+  cursor:pointer;white-space:nowrap;transition:all 0.15s;
+  flex-shrink:0;
+}
+.btn-load:active{transform:scale(0.95)}
+
+/* Seek */
+.seek-row{display:flex;align-items:center;gap:0.6rem}
+.seek-row span{font-size:0.72rem;color:var(--muted);min-width:36px;text-align:center}
+input[type=range]{
+  flex:1;-webkit-appearance:none;appearance:none;
+  height:3px;border-radius:2px;
+  outline:none;cursor:pointer;
+  background:linear-gradient(90deg,var(--gold) var(--p,0%),var(--border2) var(--p,0%));
+}
+input[type=range]::-webkit-slider-thumb{
+  -webkit-appearance:none;
+  width:17px;height:17px;border-radius:50%;
+  background:var(--gold2);cursor:pointer;
+  box-shadow:0 0 8px rgba(200,168,75,0.55);
+}
+
+/* Playback */
+.pb{display:flex;gap:0.45rem;justify-content:center}
+.pbb{
+  flex:1;max-width:66px;padding:0.82rem 0.3rem;
+  background:var(--s1);border:1.5px solid var(--border2);border-radius:13px;
+  color:var(--text);font-size:1.1rem;
+  cursor:pointer;transition:all 0.14s;
+  display:flex;align-items:center;justify-content:center;
+}
+.pbb:active{transform:scale(0.92);background:var(--border)}
+.pbb-r{border-color:rgba(214,51,72,0.22)}
+.pbb-r:active{background:rgba(214,51,72,0.1)}
+.pbb-g{border-color:rgba(200,168,75,0.28)}
+.pbb-g:active{background:rgba(200,168,75,0.08)}
+
+/* Share */
+.scard{
+  background:var(--s1);border:1px solid var(--border2);border-radius:14px;
+  padding:0.9rem 1rem;
+}
+.sc-title{
+  font-size:0.65rem;color:var(--gold);
+  letter-spacing:0.22em;text-transform:uppercase;font-weight:700;
+  margin-bottom:0.55rem;
+}
+.sc-row{display:flex;gap:0.45rem;align-items:center}
+.sc-url{
+  flex:1;font-size:0.72rem;color:var(--muted2);
+  font-family:monospace;direction:ltr;
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+}
+.btn-cp{
+  padding:0.42rem 0.85rem;
+  background:var(--s2);border:1px solid var(--border2);border-radius:8px;
+  color:var(--text);font-family:'Tajawal',sans-serif;font-size:0.78rem;
+  cursor:pointer;white-space:nowrap;transition:all 0.18s;
+}
+.btn-cp.ok{border-color:var(--gold);color:var(--gold)}
+
+/* Viewer info */
+.vinfo{
+  flex-shrink:0;
+  padding:0.85rem 1rem;
+  background:var(--s2);border-top:1px solid var(--border);
+  font-size:0.78rem;color:var(--muted);text-align:center;line-height:1.7;
+}
+
+/* ══ SPEED SHEET ══ */
+.sheet-bg{
+  display:none;position:fixed;inset:0;
+  background:rgba(0,0,0,0.8);z-index:500;
+  align-items:flex-end;backdrop-filter:blur(8px);
+}
+.sheet-bg.open{display:flex}
+.sheet{
+  background:var(--s2);border:1px solid var(--border2);
+  border-radius:22px 22px 0 0;
+  padding:1.8rem 1.3rem 2.2rem;
+  width:100%;max-width:460px;margin:0 auto;
+  animation:sheetUp 0.28s cubic-bezier(0.16,1,0.3,1);
+}
+@keyframes sheetUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
+.sheet h3{font-size:0.95rem;margin-bottom:1.1rem;color:var(--gold2)}
+.sg{display:grid;grid-template-columns:repeat(4,1fr);gap:0.45rem;margin-bottom:0.9rem}
+.sbb{
+  padding:0.72rem 0.2rem;
+  background:var(--s1);border:1.5px solid var(--border2);border-radius:11px;
+  color:var(--text);font-family:'Tajawal',sans-serif;font-size:0.85rem;
+  cursor:pointer;text-align:center;transition:all 0.14s;
+}
+.sbb.on{border-color:var(--gold);color:var(--gold);background:rgba(200,168,75,0.07)}
+.sbb:active{transform:scale(0.93)}
+
+/* ══ DRIVE HELP ══ */
+.help-box{
+  background:rgba(200,168,75,0.05);
+  border:1px solid rgba(200,168,75,0.15);
+  border-radius:12px;padding:0.8rem;
+  font-size:0.75rem;color:var(--muted2);line-height:1.7;
+}
+.help-box strong{color:var(--gold2)}
+
+/* ══ TOAST ══ */
+.toast{
+  position:fixed;bottom:1.6rem;left:50%;transform:translateX(-50%);
+  background:var(--s2);border:1px solid var(--border2);
+  border-radius:12px;padding:0.65rem 1.3rem;
+  font-size:0.8rem;color:var(--text);
+  z-index:9000;opacity:0;transition:opacity 0.22s;
+  white-space:nowrap;pointer-events:none;
+  box-shadow:0 12px 40px rgba(0,0,0,0.6);
+}
+.toast.show{opacity:1}
+</style>
+</head>
+<body>
+
+<!-- ══ LANDING ══ -->
+<div id="pg-land" class="screen active">
+  <div class="brand">
+    <div class="brand-name">GH&amp;MNMN</div>
+    <div class="brand-line"><span class="brand-tag">مشاهدة جماعية</span></div>
+    <div class="strip">
+      <div class="hole"></div><div class="hole"></div><div class="hole"></div>
+      <div class="hole"></div><div class="hole"></div><div class="hole"></div>
+      <div class="hole"></div><div class="hole"></div><div class="hole"></div>
+    </div>
+  </div>
+
+  <div class="lcard">
+    <button class="fbtn fbtn-red" onclick="createRoom()">🎬 &nbsp;أنشئ غرفة — أنت المضيف</button>
+    <div class="sep">أو انضم لغرفة</div>
+    <input class="finp finp-code" id="join-code" placeholder="XXXX"
+      maxlength="6" oninput="this.value=this.value.toUpperCase()">
+    <button class="fbtn fbtn-ghost" onclick="joinRoom()">🍿 &nbsp;انضم للمشاهدة</button>
+  </div>
+</div>
+
+<!-- ══ HOST ROOM ══ -->
+<div id="pg-host" class="screen">
+  <div class="rh">
+    <div class="rh-logo">GH&amp;MNMN</div>
+    <div class="badge badge-h">🎬 مضيف</div>
+    <div class="vcnt">
+      <div class="ldot ldot-r"></div>
+      <span id="h-cnt">0</span>&nbsp;مشاهد
+    </div>
+  </div>
+
+  <div class="vbox">
+    <div class="vover" id="h-over">
+      <div class="vover-icon">▶</div>
+      <p>أضف رابط Google Drive وابدأ</p>
+    </div>
+    <video id="h-vid" playsinline webkit-playsinline
+      preload="metadata"
+      style="display:none;width:100%;height:100%"></video>
+  </div>
+
+  <div class="sb">
+    <div style="display:flex;align-items:center;gap:4px">
+      <span class="sdot" id="h-dot"></span>
+      <span id="h-stxt" style="font-size:0.68rem">يتصل...</span>
+    </div>
+    <span id="h-timedisp">0:00</span>
+    <span class="stag">LIVE</span>
+  </div>
+
+  <div class="ctrl-wrap">
+
+    <!-- Drive URL -->
+    <div class="drow">
+      <input type="url" id="drive-url"
+        placeholder="رابط Google Drive للفيديو..."
+        inputmode="url" autocomplete="off">
+      <button class="btn-load" onclick="cmdLoad()">▶ تشغيل</button>
+    </div>
+
+    <!-- Help -->
+    <div class="help-box">
+      📁 <strong>كيف تحصل على الرابط:</strong><br>
+      Drive ← الفيديو ← نقاط ⋮ ← مشاركة ← نسخ الرابط
+    </div>
+
+    <!-- Seek -->
+    <div class="seek-row">
+      <span id="h-cur">0:00</span>
+      <input type="range" id="seekbar" min="0" max="1000" value="0"
+             oninput="cmdSeek(this.value)" ontouchend="cmdSeekEnd()">
+      <span id="h-dur">0:00</span>
+    </div>
+
+    <!-- Playback -->
+    <div class="pb">
+      <button class="pbb pbb-r" onclick="cmdStop()">⏹</button>
+      <button class="pbb" onclick="cmdRew()">⏪</button>
+      <button class="pbb pbb-g" id="h-playbtn" onclick="cmdToggle()">⏸</button>
+      <button class="pbb" onclick="cmdFwd()">⏩</button>
+      <button class="pbb" onclick="openSpeed()">🐇</button>
+    </div>
+
+    <!-- Share -->
+    <div class="scard">
+      <div class="sc-title">🔗 رابط الغرفة</div>
+      <div class="sc-row">
+        <span class="sc-url" id="share-url">جارٍ الإنشاء...</span>
+        <button class="btn-cp" id="copy-btn" onclick="copyLink()">نسخ</button>
+      </div>
+    </div>
+
+    <div style="height:0.4rem"></div>
+  </div>
+</div>
+
+<!-- ══ VIEWER ROOM ══ -->
+<div id="pg-viewer" class="screen">
+  <div class="rh">
+    <div class="rh-logo">GH&amp;MNMN</div>
+    <div class="badge badge-v">🍿 مشاهد</div>
+    <div class="vcnt">
+      <div class="ldot ldot-g"></div>
+      <span id="v-cnt">—</span>&nbsp;مشاهد
+    </div>
+  </div>
+
+  <div class="vbox">
+    <div class="vwait" id="v-wait">
+      <div class="spin"></div>
+      <p id="v-wait-txt">يتصل بالمضيف...</p>
+    </div>
+    <video id="v-vid" playsinline webkit-playsinline
+      preload="metadata"
+      style="display:none;width:100%;height:100%"></video>
+  </div>
+
+  <div class="sb">
+    <div style="display:flex;align-items:center;gap:4px">
+      <span class="sdot" id="v-dot"></span>
+      <span id="v-stxt" style="font-size:0.68rem">يتصل...</span>
+    </div>
+    <span id="v-code-disp" style="font-family:monospace;letter-spacing:0.15em;font-size:0.68rem"></span>
+    <span class="stag">مشاهد</span>
+  </div>
+
+  <div class="vinfo">
+    📡 التحكم بيد المضيف فقط<br>
+    ستُزامَن تلقائياً مع الجميع ✨
+  </div>
+</div>
+
+<!-- ══ SPEED SHEET ══ -->
+<div class="sheet-bg" id="speed-bg" onclick="bgCloseSpeed(event)">
+  <div class="sheet">
+    <h3>⚡ سرعة التشغيل</h3>
+    <div class="sg">
+      <button class="sbb" onclick="cmdSpeed(0.25)">0.25×</button>
+      <button class="sbb" onclick="cmdSpeed(0.5)">0.5×</button>
+      <button class="sbb" onclick="cmdSpeed(0.75)">0.75×</button>
+      <button class="sbb on" onclick="cmdSpeed(1)">1×</button>
+      <button class="sbb" onclick="cmdSpeed(1.25)">1.25×</button>
+      <button class="sbb" onclick="cmdSpeed(1.5)">1.5×</button>
+      <button class="sbb" onclick="cmdSpeed(1.75)">1.75×</button>
+      <button class="sbb" onclick="cmdSpeed(2)">2×</button>
+    </div>
+    <button class="fbtn fbtn-ghost" style="padding:0.65rem" onclick="closeSpeed()">إغلاق</button>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+/* ═══════════════════════════════════════════
+   GH&MNMN — Watch Party
+   Stack: PeerJS (P2P) + HTML5 Video (Drive)
+   ═══════════════════════════════════════════ */
+
+const $ = id => document.getElementById(id);
+
+/* ─ State ─ */
+let peer = null;
+let hostConn = null;        // viewer → host connection
+let viewers = {};           // host → { peerId: DataConnection }
+let roomCode = '';
+let isHost = false;
+let vidSrc = '';
+let isSeeking = false;
+let speed = 1;
+
+const hVid = $('h-vid');
+const vVid = $('v-vid');
+
+/* ─ Util ─ */
+function genCode(){ return Math.random().toString(36).slice(2,6).toUpperCase() }
+
+function fmt(s){
+  s = Math.floor(s||0);
+  return `${Math.floor(s/60)}:${(s%60).toString().padStart(2,'0')}`;
+}
+
+function toast(msg, ms=2500){
+  const t=$('toast');t.textContent=msg;t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),ms);
+}
+
+function show(id){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  $(id).classList.add('active');
+}
+
+function setDot(who, state){ // ok | warn | off
+  const d=$(who+'-dot');
+  d.className='sdot'+(state==='ok'?' sdot-ok':state==='warn'?' sdot-warn':'');
+}
+
+function buildURL(code){ return location.href.split('?')[0]+'?room='+code }
+
+/* ─ Drive URL → direct video src ─ */
+function driveToSrc(url){
+  // Formats:
+  // https://drive.google.com/file/d/FILE_ID/view
+  // https://drive.google.com/open?id=FILE_ID
+  // https://drive.google.com/uc?id=FILE_ID
+  const m = url.match(/\/d\/([a-zA-Z0-9_-]+)/) ||
+             url.match(/[?&]id=([a-zA-Z0-9_-]+)/);
+  if(!m) return null;
+  return `https://drive.google.com/uc?export=download&id=${m[1]}`;
+}
+
+/* ─ PeerJS init ─ */
+function initPeer(id, cb){
+  const p = new Peer(id, {
+    host: '0.peerjs.com', port: 443, path: '/',
+    secure: true,
+    config: {
+      iceServers:[
+        {urls:'stun:stun.l.google.com:19302'},
+        {urls:'stun:global.stun.twilio.com:3478'}
+      ]
+    }
+  });
+  p.on('open', realId => cb(p, realId));
+  p.on('error', e => {
+    toast('⚠️ خطأ في الاتصال: '+e.type);
+    setDot(isHost?'h':'v','warn');
+  });
+  return p;
+}
+
+/* ══ HOST ══ */
+window.createRoom = function(){
+  roomCode = genCode();
+  isHost = true;
+  show('pg-host');
+  $('share-url').textContent = buildURL(roomCode);
+  $('h-stxt').textContent = 'يتصل...';
+  setDot('h','warn');
+
+  initPeer('ghmnmn-host-'+roomCode, (p, id)=>{
+    peer = p;
+    setDot('h','ok');
+    $('h-stxt').textContent = 'جاهز · انتظر مشاهدين';
+    toast('✅ الغرفة جاهزة — شارك الرابط!');
+
+    p.on('connection', conn => {
+      const vid = conn.peer;
+      viewers[vid] = conn;
+      updateViewerCount();
+
+      conn.on('open',()=>{
+        // Send current state to new viewer
+        conn.send(buildState());
+        toast('👀 انضم مشاهد جديد');
+        updateViewerCount();
+      });
+
+      conn.on('data', d=>{
+        if(d.t==='ping') conn.send({t:'pong',...buildState()});
+      });
+
+      conn.on('close',()=>{
+        delete viewers[vid];
+        updateViewerCount();
+      });
+    });
+  });
+
+  setupHostVideo();
+};
+
+function buildState(){
+  return {
+    t:'state',
+    src: vidSrc,
+    time: hVid.currentTime||0,
+    playing: !hVid.paused,
+    speed,
+    ts: Date.now()
+  };
+}
+
+function broadcast(msg){
+  Object.values(viewers).forEach(c=>{ try{c.send(msg)}catch(e){} });
+}
+
+function updateViewerCount(){
+  $('h-cnt').textContent = Object.keys(viewers).length;
+}
+
+function setupHostVideo(){
+  hVid.addEventListener('timeupdate',()=>{
+    if(isSeeking) return;
+    const d=hVid.duration||0,c=hVid.currentTime||0;
+    $('h-timedisp').textContent=fmt(c);
+    $('h-cur').textContent=fmt(c);
+    $('h-dur').textContent=fmt(d);
+    if(d>0){
+      const pct=(c/d)*1000;
+      $('seekbar').value=pct;
+      $('seekbar').style.setProperty('--p',(pct/10)+'%');
+    }
+  });
+}
+
+/* ══ HOST COMMANDS ══ */
+window.cmdLoad = function(){
+  const raw=$('drive-url').value.trim();
+  const src = driveToSrc(raw);
+  if(!src){
+    toast('❌ رابط Google Drive غير صالح');
+    return;
+  }
+  vidSrc=src;
+  hVid.src=src;
+  hVid.style.display='block';
+  $('h-over').style.display='none';
+  hVid.load();
+  hVid.play().catch(()=>{});
+  $('h-playbtn').textContent='⏸';
+  broadcast({t:'load',src,time:0,ts:Date.now()});
+  toast('🎬 يُحمَّل الفيديو...');
+};
+
+window.cmdToggle = function(){
+  if(hVid.paused){ hVid.play(); $('h-playbtn').textContent='⏸'; }
+  else { hVid.pause(); $('h-playbtn').textContent='▶'; }
+  broadcast({t:'sync',time:hVid.currentTime,playing:!hVid.paused,ts:Date.now()});
+  toast(hVid.paused?'⏸ إيقاف مؤقت':'▶ تشغيل');
+};
+
+window.cmdStop = function(){
+  hVid.pause();hVid.currentTime=0;hVid.src='';vidSrc='';
+  hVid.style.display='none';
+  $('h-over').style.display='flex';
+  $('h-playbtn').textContent='▶';
+  $('seekbar').value=0;
+  $('seekbar').style.setProperty('--p','0%');
+  $('h-cur').textContent='0:00';$('h-dur').textContent='0:00';
+  broadcast({t:'stop'});toast('⏹ أُوقف للجميع');
+};
+
+window.cmdRew = function(){
+  hVid.currentTime=Math.max(0,hVid.currentTime-10);
+  broadcast({t:'sync',time:hVid.currentTime,playing:!hVid.paused,ts:Date.now()});
+  toast('⏪ 10 ثواني');
+};
+
+window.cmdFwd = function(){
+  hVid.currentTime=Math.min(hVid.duration||hVid.currentTime+10,hVid.currentTime+10);
+  broadcast({t:'sync',time:hVid.currentTime,playing:!hVid.paused,ts:Date.now()});
+  toast('⏩ 10 ثواني');
+};
+
+window.cmdSeek = function(val){
+  isSeeking=true;
+  const d=hVid.duration||0;
+  if(d){ hVid.currentTime=(val/1000)*d; }
+  $('seekbar').style.setProperty('--p',(val/10)+'%');
+};
+
+window.cmdSeekEnd = function(){
+  isSeeking=false;
+  broadcast({t:'sync',time:hVid.currentTime,playing:!hVid.paused,ts:Date.now()});
+};
+
+window.cmdSpeed = function(s){
+  speed=s;
+  hVid.playbackRate=s;
+  document.querySelectorAll('.sbb').forEach(b=>b.classList.remove('on'));
+  event.target.classList.add('on');
+  broadcast({t:'speed',speed:s,time:hVid.currentTime,ts:Date.now()});
+  closeSpeed();toast('⚡ '+s+'×');
+};
+
+/* ══ VIEWER ══ */
+window.joinRoom = function(){
+  const code=$('join-code').value.trim().toUpperCase();
+  if(!code||code.length<3){ toast('❌ أدخل كود الغرفة'); return; }
+  roomCode=code;isHost=false;
+  show('pg-viewer');
+  $('v-code-disp').textContent='🚪 '+code;
+  $('v-stxt').textContent='يتصل...';
+  setDot('v','warn');
+
+  const myId='ghmnmn-v-'+genCode()+Date.now();
+  initPeer(myId, (p,id)=>{
+    peer=p;
+    const conn=p.connect('ghmnmn-host-'+code, {reliable:true});
+    hostConn=conn;
+
+    conn.on('open',()=>{
+      setDot('v','ok');
+      $('v-stxt').textContent='متصل';
+      $('v-wait-txt').textContent='في انتظار المضيف...';
+      conn.send({t:'ping'});
+    });
+
+    conn.on('data', d => applyState(d));
+
+    conn.on('close',()=>{
+      setDot('v','warn');
+      $('v-stxt').textContent='انقطع الاتصال';
+      toast('⚠️ انقطع الاتصال بالمضيف');
+    });
+
+    conn.on('error',()=>toast('⚠️ تعذّر الاتصال بالغرفة'));
+
+    // Ping every 15s to stay in sync
+    setInterval(()=>{ try{conn.send({t:'ping'})}catch(e){} }, 15000);
+  });
+
+  setupViewerVideo();
+};
+
+function applyState(d){
+  if(!d||!d.t) return;
+
+  if(d.t==='stop'){
+    vVid.pause();vVid.src='';
+    vVid.style.display='none';
+    $('v-wait').style.display='flex';
+    $('v-wait').style.opacity='1';
+    $('v-wait-txt').textContent='المضيف أوقف الفيديو...';
+    return;
+  }
+
+  if(d.t==='load'||d.t==='pong'||d.t==='state'){
+    if(d.src && vVid.src !== d.src){
+      vVid.src=d.src;vVid.load();
+      vVid.style.display='block';
+      $('v-wait').style.opacity='0';
+      setTimeout(()=>$('v-wait').style.display='none',450);
+    }
+  }
+
+  if(d.t==='speed'){ vVid.playbackRate=d.speed||1; }
+
+  // Compensate for network lag
+  const lag=(Date.now()-(d.ts||Date.now()))/1000;
+  const targetTime=(d.time||0)+(d.playing?lag:0);
+
+  if(d.src && Math.abs(vVid.currentTime-targetTime)>1.5){
+    vVid.currentTime=targetTime;
+  }
+
+  if(d.playing===true && vVid.paused){ vVid.play().catch(()=>{}); }
+  if(d.playing===false && !vVid.paused){ vVid.pause(); }
+
+  if(d.viewers!==undefined) $('v-cnt').textContent=d.viewers;
+  setDot('v','ok');
+  $('v-stxt').textContent='مزامَن ✓';
+}
+
+function setupViewerVideo(){
+  vVid.addEventListener('waiting',()=>setDot('v','warn'));
+  vVid.addEventListener('playing',()=>setDot('v','ok'));
+}
+
+/* ══ SHARE ══ */
+window.copyLink = function(){
+  const url=buildURL(roomCode);
+  navigator.clipboard?.writeText(url).then(()=>{
+    $('copy-btn').textContent='✓ تم';$('copy-btn').classList.add('ok');
+    toast('🔗 تم نسخ الرابط');
+    setTimeout(()=>{$('copy-btn').textContent='نسخ';$('copy-btn').classList.remove('ok')},2500);
+  }).catch(()=>{
+    if(navigator.share) navigator.share({title:'GH&MNMN',url});
+    else toast('🔗 '+url,5000);
+  });
+};
+
+/* ══ SPEED SHEET ══ */
+window.openSpeed=()=>$('speed-bg').classList.add('open');
+window.closeSpeed=()=>$('speed-bg').classList.remove('open');
+window.bgCloseSpeed=e=>{ if(e.target===$('speed-bg'))closeSpeed(); };
+
+/* ══ URL AUTO-JOIN ══ */
+(function(){
+  const r=new URLSearchParams(location.search).get('room');
+  if(r){ $('join-code').value=r; joinRoom(); }
+})();
+</script>
+</body>
+</html>
